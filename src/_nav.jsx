@@ -45,12 +45,12 @@ const nav = [
     to: '/portfolio',
     icon: <AppstoreOutlined className={iconClass} style={{ ...iconStyle, color: '#fff' }} />,
   },
-  {
-    component: CNavItem,
-    name: 'Testimonials',
-    to: '/testimonials',
-    icon: <StarOutlined className={iconClass} style={{ ...iconStyle, color: '#fff' }} />,
-  },
+  // {
+  //   component: CNavItem,
+  //   name: 'Testimonials',
+  //   to: '/testimonials',
+  //   icon: <StarOutlined className={iconClass} style={{ ...iconStyle, color: '#fff' }} />,
+  // },
   {
     component: CNavItem,
     name: 'Contact',

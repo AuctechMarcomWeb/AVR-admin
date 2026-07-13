@@ -3,7 +3,7 @@ import { useState } from 'react'
 import {
   Table, Button, Modal, Space, Popconfirm, Tag, ConfigProvider, Input, Descriptions, Badge,
 } from 'antd'
-import { DeleteOutlined, SearchOutlined, EyeOutlined } from '@ant-design/icons'
+import { DeleteOutlined, SearchOutlined, EyeOutlined, MailOutlined, PhoneOutlined } from '@ant-design/icons'
 import dayjs from 'dayjs'
 import { useContact } from '../../Hooks/useContact'
 
@@ -19,9 +19,23 @@ const Contact = () => {
       width: 70,
       render: (_, __, i) => (pagination.current - 1) * pagination.pageSize + i + 1,
     },
-    { title: 'Name', dataIndex: 'name', ellipsis: true },
-    { title: 'Email', dataIndex: 'email', ellipsis: true },
-    { title: 'Phone', dataIndex: 'phone', width: 130 },
+    {
+      title: 'Contact',
+      width: 220,
+      render: (_, r) => (
+        <div style={{ lineHeight: 1.6 }}>
+          <div style={{ fontWeight: 600, color: '#042954', fontSize: 13 }}>{r.name}</div>
+          <div style={{ fontSize: 12, color: '#555' }}>
+            <MailOutlined style={{ marginRight: 4, color: '#888' }} />
+            {r.email}
+          </div>
+          <div style={{ fontSize: 12, color: '#555' }}>
+            <PhoneOutlined style={{ marginRight: 4, color: '#888' }} />
+            {r.phone}
+          </div>
+        </div>
+      ),
+    },
     { title: 'Subject', dataIndex: 'subject', ellipsis: true },
     {
       title: 'Read',
@@ -55,15 +69,46 @@ const Contact = () => {
         <h4 style={{ margin: 0, color: '#042954', fontWeight: 700 }}>Contact Enquiries</h4>
       </div>
 
-      <div style={{ display: 'flex', alignItems: 'center', gap: 12, marginBottom: 16, flexWrap: 'wrap' }}>
-        <Input
-          prefix={<SearchOutlined style={{ color: '#aaa' }} />}
-          placeholder="Search by name, email..."
-          value={search}
-          onChange={(e) => handleSearch(e.target.value)}
-          allowClear
-          style={{ width: 280, borderRadius: 8 }}
-        />
+<div
+        style={{
+          display: 'flex',
+          alignItems: 'flex-end',
+          gap: 20,
+          marginBottom: 16,
+          flexWrap: 'wrap',
+        }}
+      >
+        {/* Search */}
+        <div
+          style={{
+            display: 'flex',
+            flexDirection: 'column',
+            gap: 6,
+          }}
+        >
+          <label
+            style={{
+              fontWeight: 600,
+              color: '#333',
+            }}
+          >
+            Search
+          </label>
+
+          <Input
+            prefix={<SearchOutlined style={{ color: '#aaa' }} />}
+            placeholder="Search..."
+            value={search}
+            onChange={(e) => handleSearch(e.target.value)}
+            allowClear
+            style={{
+              width: 280,
+              borderRadius: 8,
+            }}
+          />
+        </div>
+
+        
       </div>
 
       <ConfigProvider theme={{ components: { Table: { headerBg: TABLE_HEADER_BG, headerColor: '#fff', headerSortActiveBg: '#021933', headerSortHoverBg: '#063a70' } } }}>

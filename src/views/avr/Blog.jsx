@@ -2,13 +2,13 @@
 import { useState } from 'react'
 import {
   Table, Button, Modal, Form, Input, Switch,
-  Space, Popconfirm, Tag, Image, ConfigProvider, Spin, Checkbox,
+  Space, Popconfirm, Tag, Image, ConfigProvider, Checkbox,
 } from 'antd'
 import { PlusOutlined, EditOutlined, DeleteOutlined, SearchOutlined } from '@ant-design/icons'
 import { CKEditor } from '@ckeditor/ckeditor5-react'
 import ClassicEditor from '@ckeditor/ckeditor5-build-classic'
 import { useBlog } from '../../Hooks/useBlog'
-import { uploadService } from '../../services/upload.service'
+import SingleImageUpload from '../../components/SingleImageUpload'
 
 const TABLE_HEADER_BG = '#042954'
 
@@ -22,7 +22,6 @@ const Blog = () => {
   const [modalOpen, setModalOpen] = useState(false)
   const [editRecord, setEditRecord] = useState(null)
   const [submitting, setSubmitting] = useState(false)
-  const [uploading, setUploading] = useState(false)
   const [mainImageUrl, setMainImageUrl] = useState('')
   const [details, setDetails] = useState('')
   const [form] = Form.useForm()
@@ -50,20 +49,6 @@ const Blog = () => {
       isActive: record.isActive,
     })
     setModalOpen(true)
-  }
-
-  const handleImageUpload = async (e) => {
-    const file = e.target.files?.[0]
-    if (!file) return
-    setUploading(true)
-    try {
-      const res = await uploadService.uploadImage(file)
-      setMainImageUrl(res.data.data.imageUrl)
-    } catch {
-      // error handled in service
-    } finally {
-      setUploading(false)
-    }
   }
 
   const handleSubmit = () => {
@@ -129,16 +114,76 @@ const Blog = () => {
         </Button>
       </div>
 
-      <div style={{ display: 'flex', alignItems: 'center', gap: 12, marginBottom: 16, flexWrap: 'wrap' }}>
-        <Input
-          prefix={<SearchOutlined style={{ color: '#aaa' }} />}
-          placeholder="Search by heading..."
-          value={search}
-          onChange={(e) => handleSearch(e.target.value)}
-          allowClear
-          style={{ width: 280, borderRadius: 8 }}
-        />
-        <Checkbox checked={activeOnly} onChange={(e) => handleActiveToggle(e.target.checked)}>Active</Checkbox>
+   <div
+        style={{
+          display: 'flex',
+          alignItems: 'flex-end',
+          gap: 20,
+          marginBottom: 16,
+          flexWrap: 'wrap',
+        }}
+      >
+        {/* Search */}
+        <div
+          style={{
+            display: 'flex',
+            flexDirection: 'column',
+            gap: 6,
+          }}
+        >
+          <label
+            style={{
+              fontWeight: 600,
+              color: '#333',
+            }}
+          >
+            Search
+          </label>
+
+          <Input
+            prefix={<SearchOutlined style={{ color: '#aaa' }} />}
+            placeholder="Search..."
+            value={search}
+            onChange={(e) => handleSearch(e.target.value)}
+            allowClear
+            style={{
+              width: 280,
+              borderRadius: 8,
+            }}
+          />
+        </div>
+
+        {/* Status */}
+        <div
+          style={{
+            display: 'flex',
+            flexDirection: 'column',
+            gap: 10,
+          }}
+        >
+          <label
+            style={{
+              fontWeight: 600,
+              color: '#333',
+            }}
+          >
+          </label>
+
+          <div
+            style={{
+              height: 32,
+              display: 'flex',
+              alignItems: 'center',
+            }}
+          >
+            <Checkbox
+              checked={activeOnly}
+              onChange={(e) => handleActiveToggle(e.target.checked)}
+            >
+              Active
+            </Checkbox>
+          </div>
+        </div>
       </div>
 
       <ConfigProvider theme={{ components: { Table: { headerBg: TABLE_HEADER_BG, headerColor: '#fff', headerSortActiveBg: '#021933', headerSortHoverBg: '#063a70' } } }}>
@@ -157,70 +202,106 @@ const Blog = () => {
       <Modal
         title={editRecord ? 'Edit Blog' : 'Add Blog'}
         open={modalOpen}
-        onOk={handleSubmit}
         onCancel={() => setModalOpen(false)}
-        okText={editRecord ? 'Update' : 'Add'}
-        okButtonProps={{ style: { background: '#042954' }, loading: submitting || uploading }}
+        footer={null}
         width="min(860px, 96vw)"
         destroyOnHidden
       >
-        <Spin spinning={submitting || uploading} tip={uploading ? 'Uploading...' : 'Saving...'}>
-          <Form form={form} layout="vertical" style={{ marginTop: 8 }} requiredMark={false}>
-            <div style={{ display: 'flex', gap: 12, flexWrap: 'wrap' }}>
+        <Form form={form} layout="vertical" style={{ marginTop: 8 }} requiredMark={false}>
+
+          {/* Row 1 — Heading + URL Slug */}
+          <div style={{ display: 'flex', gap: 12, flexWrap: 'wrap' }}>
+            <Form.Item
+              name="heading"
+              label={<span>Heading <span style={{ color: 'red' }}>*</span></span>}
+              rules={[{ required: true, message: 'Enter blog heading' }]}
+              style={{ flex: 1, minWidth: 200, marginBottom: 10 }}
+            >
+              <Input placeholder="My First Blog" />
+            </Form.Item>
+            <Form.Item
+              name="url"
+              label={<span>URL Slug <span style={{ color: 'red' }}>*</span></span>}
+              rules={[{ required: true, message: 'Enter URL slug' }]}
+              style={{ flex: 1, minWidth: 180, marginBottom: 10 }}
+            >
+              <Input placeholder="my-first-blog" />
+            </Form.Item>
+          </div>
+
+          {/* Row 2 — SEO Title + Meta Keywords */}
+          <div style={{ display: 'flex', gap: 12, flexWrap: 'wrap' }}>
+            <Form.Item name="seoTitle" label="SEO Title" style={{ flex: 1, minWidth: 180, marginBottom: 10 }}>
+              <Input placeholder="My First Blog | AVR" />
+            </Form.Item>
+            <Form.Item name="metaKeywords" label="Meta Keywords" style={{ flex: 1, minWidth: 180, marginBottom: 10 }}>
+              <Input placeholder="blog, avr, design" />
+            </Form.Item>
+          </div>
+
+          {/* Short Description */}
+          <Form.Item name="shortDescription" label="Short Description" style={{ marginBottom: 10 }}>
+            <Input.TextArea rows={2} placeholder="A short intro to this blog..." />
+          </Form.Item>
+
+          {/* Row 3 — Main Image Upload + Image Alt/Name side by side */}
+          <div style={{ display: 'flex', gap: 12, alignItems: 'flex-start', flexWrap: 'wrap', marginBottom: 10 }}>
+            <div style={{ flex: 1, minWidth: 0 }}>
               <Form.Item
-                name="heading"
-                label={<span>Heading <span style={{ color: 'red' }}>*</span></span>}
-                rules={[{ required: true, message: 'Enter blog heading' }]}
-                style={{ flex: 1, minWidth: 220 }}
+                label={<span>Main Image <span style={{ color: 'red' }}>*</span></span>}
+                style={{ marginBottom: 0 }}
               >
-                <Input placeholder="My First Blog" />
-              </Form.Item>
-              <Form.Item
-                name="url"
-                label={<span>URL Slug <span style={{ color: 'red' }}>*</span></span>}
-                rules={[{ required: true, message: 'Enter URL slug' }]}
-                style={{ flex: 1, minWidth: 200 }}
-              >
-                <Input placeholder="my-first-blog" />
+                <SingleImageUpload value={mainImageUrl} onChange={setMainImageUrl} width="100%" height={104} />
               </Form.Item>
             </div>
-            <div style={{ display: 'flex', gap: 12, flexWrap: 'wrap' }}>
-              <Form.Item name="seoTitle" label="SEO Title" style={{ flex: 1, minWidth: 200 }}>
-                <Input placeholder="My First Blog | AVR" />
-              </Form.Item>
-              <Form.Item name="metaKeywords" label="Meta Keywords" style={{ flex: 1, minWidth: 200 }}>
-                <Input placeholder="blog, avr, design" />
+            <div style={{ flex: 1, minWidth: 0 }}>
+              <Form.Item
+                name="mainImageName"
+                label="Image Alt / Name"
+                style={{ marginBottom: 0 }}
+              >
+                <Input placeholder="sample-image" />
               </Form.Item>
             </div>
-            <Form.Item name="shortDescription" label="Short Description">
-              <Input.TextArea rows={2} placeholder="A short intro to this blog..." />
-            </Form.Item>
-            <Form.Item label={<span>Main Image <span style={{ color: 'red' }}>*</span></span>}>
-              <input type="file" accept="image/*" onChange={handleImageUpload} />
-              {mainImageUrl && (
-                <img src={mainImageUrl} alt="preview" style={{ width: '100%', maxHeight: 160, objectFit: 'cover', borderRadius: 6, marginTop: 8 }} />
-              )}
-            </Form.Item>
-            <Form.Item name="mainImageName" label="Image Alt / Name">
-              <Input placeholder="sample-image" />
-            </Form.Item>
-            <Form.Item label={<span>Blog Content (Details) <span style={{ color: 'red' }}>*</span></span>}>
-              <div style={{ border: '1px solid #d9d9d9', borderRadius: 6, overflow: 'hidden' }}>
-                <CKEditor
-                  editor={ClassicEditor}
-                  data={details}
-                  onChange={(_, editor) => setDetails(editor.getData())}
-                  config={{
-                    toolbar: ['heading', '|', 'bold', 'italic', 'underline', 'link', '|', 'bulletedList', 'numberedList', 'blockQuote', '|', 'imageUpload', 'insertTable', '|', 'undo', 'redo'],
-                  }}
-                />
-              </div>
-            </Form.Item>
-            <Form.Item name="isActive" label="Status" valuePropName="checked">
-              <Switch checkedChildren="Active" unCheckedChildren="Inactive" />
-            </Form.Item>
-          </Form>
-        </Spin>
+          </div>
+
+          {/* Blog Content CKEditor */}
+          <Form.Item
+            label={<span>Blog Content <span style={{ color: 'red' }}>*</span></span>}
+            style={{ marginBottom: 10 }}
+          >
+            <div style={{ border: '1px solid #d9d9d9', borderRadius: 6, overflow: 'hidden' }}>
+              <CKEditor
+                editor={ClassicEditor}
+                data={details}
+                onChange={(_, editor) => setDetails(editor.getData())}
+                config={{
+                  toolbar: ['heading', '|', 'bold', 'italic', 'underline', 'link', '|',
+                    'bulletedList', 'numberedList', 'blockQuote', '|',
+                    'insertTable', '|', 'undo', 'redo'],
+                }}
+              />
+            </div>
+          </Form.Item>
+
+          {/* Status */}
+          <Form.Item name="isActive" label="Status" valuePropName="checked" style={{ marginBottom: 12 }}>
+            <Switch checkedChildren="Active" unCheckedChildren="Inactive" />
+          </Form.Item>
+
+          {/* Footer buttons */}
+          <div style={{ display: 'flex', justifyContent: 'flex-end', gap: 8 }}>
+            <Button onClick={() => setModalOpen(false)} disabled={submitting}>Cancel</Button>
+            <Button
+              type="primary"
+              onClick={handleSubmit}
+              loading={submitting}
+              style={{ background: '#042954', minWidth: 90 }}
+            >
+              {submitting ? 'Saving...' : editRecord ? 'Update' : 'Add'}
+            </Button>
+          </div>
+        </Form>
       </Modal>
     </div>
   )

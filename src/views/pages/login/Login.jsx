@@ -5,7 +5,7 @@ import { Form, Input, Button } from 'antd'
 import { EyeInvisibleOutlined, EyeOutlined } from '@ant-design/icons'
 import toast from 'react-hot-toast'
 import Cookies from 'js-cookie'
-import logo from '../../../assets/seci-logo.png'
+import logo from '../../../assets/arv-logo-icon.png'
 import { authService } from '../../../services/auth.service'
 import { AppContext } from '../../../Context/AppContext'
 
@@ -67,26 +67,55 @@ const Login = () => {
           <h2 style={{ color: '#042954', fontWeight: 800, margin: 0, fontSize: 22 }}>Login</h2>
         </div>
 
-        <Form layout="vertical" onFinish={onFinish} size="middle">
+        <Form
+          layout="vertical"
+          onFinish={onFinish}
+          size="middle"
+          requiredMark={false}
+        >
           <Form.Item
             name="phone"
-            label={<span style={{ fontWeight: 600 }}>Phone Number</span>}
-            rules={[{ required: true, message: 'Please enter phone number' }]}
+            label={
+              <span style={{ fontWeight: 600 }}>
+                Phone Number <span style={{ color: '#ff4d4f' }}>*</span>
+              </span>
+            }
+            rules={[
+              {
+                required: true,
+                message: 'Please enter phone number',
+              },
+            ]}
             style={{ marginBottom: 6 }}
           >
-            <Input placeholder="Enter phone number" autoComplete="username" style={{ height: 40 }} />
+            <Input
+              placeholder="Enter phone number"
+              autoComplete="username"
+              style={{ height: 40 }}
+            />
           </Form.Item>
 
           <Form.Item
             name="password"
-            label={<span style={{ fontWeight: 600 }}>Password</span>}
-            rules={[{ required: true, message: 'Please enter password' }]}
+            label={
+              <span style={{ fontWeight: 600 }}>
+                Password <span style={{ color: '#ff4d4f' }}>*</span>
+              </span>
+            }
+            rules={[
+              {
+                required: true,
+                message: 'Please enter password',
+              },
+            ]}
             style={{ marginBottom: 10 }}
           >
             <Input.Password
               placeholder="Enter password"
               style={{ height: 40 }}
-              iconRender={(visible) => (visible ? <EyeOutlined /> : <EyeInvisibleOutlined />)}
+              iconRender={(visible) =>
+                visible ? <EyeOutlined /> : <EyeInvisibleOutlined />
+              }
               autoComplete="current-password"
             />
           </Form.Item>

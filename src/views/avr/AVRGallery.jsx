@@ -100,25 +100,76 @@ const AVRGallery = () => {
         </Button>
       </div>
 
-      <div style={{ display: 'flex', alignItems: 'center', gap: 12, marginBottom: 16, flexWrap: 'wrap' }}>
-        <Input
-          prefix={<SearchOutlined style={{ color: '#aaa' }} />}
-          placeholder="Search..."
-          value={search}
-          onChange={(e) => handleSearch(e.target.value)}
-          allowClear
-          style={{ width: 260, borderRadius: 8 }}
-        />
-        {/* <Select
-          allowClear
-          placeholder="All service types"
-          style={{ width: 180 }}
-          value={serviceTypeFilter || undefined}
-          onChange={(val) => handleServiceTypeChange(val || '')}
+      <div
+        style={{
+          display: 'flex',
+          alignItems: 'flex-end',
+          gap: 20,
+          marginBottom: 16,
+          flexWrap: 'wrap',
+        }}
+      >
+        {/* Search */}
+        <div
+          style={{
+            display: 'flex',
+            flexDirection: 'column',
+            gap: 6,
+          }}
         >
-          {SERVICE_TYPES.map((t) => <Select.Option key={t} value={t}>{t}</Select.Option>)}
-        </Select> */}
-        <Checkbox checked={activeOnly} onChange={(e) => handleActiveToggle(e.target.checked)}>Active</Checkbox>
+          <label
+            style={{
+              fontWeight: 600,
+              color: '#333',
+            }}
+          >
+            Search
+          </label>
+
+          <Input
+            prefix={<SearchOutlined style={{ color: '#aaa' }} />}
+            placeholder="Search..."
+            value={search}
+            onChange={(e) => handleSearch(e.target.value)}
+            allowClear
+            style={{
+              width: 280,
+              borderRadius: 8,
+            }}
+          />
+        </div>
+
+        {/* Status */}
+        <div
+          style={{
+            display: 'flex',
+            flexDirection: 'column',
+            gap: 10,
+          }}
+        >
+          <label
+            style={{
+              fontWeight: 600,
+              color: '#333',
+            }}
+          >
+          </label>
+
+          <div
+            style={{
+              height: 32,
+              display: 'flex',
+              alignItems: 'center',
+            }}
+          >
+            <Checkbox
+              checked={activeOnly}
+              onChange={(e) => handleActiveToggle(e.target.checked)}
+            >
+              Active
+            </Checkbox>
+          </div>
+        </div>
       </div>
 
       <ConfigProvider theme={{ components: { Table: { headerBg: TABLE_HEADER_BG, headerColor: '#fff', headerSortActiveBg: '#021933', headerSortHoverBg: '#063a70' } } }}>

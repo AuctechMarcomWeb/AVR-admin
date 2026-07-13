@@ -3,7 +3,7 @@ import React from 'react'
 import { useSelector, useDispatch } from 'react-redux'
 import { CSidebar, CSidebarBrand, CSidebarHeader } from '@coreui/react'
 import { AppSidebarNav } from './AppSidebarNav'
-import logo from '../assets/seci-logo.png'
+import logo from '../assets/arv-logo-icon.png'
 import useNav from '../_nav'
 
 const AppSidebar = () => {
