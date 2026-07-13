@@ -1,0 +1,15 @@
+{
+  "short_name": "SECI Admin",
+  "name": "SECI - Council for Promotion of Social Justice & Empowerment of India",
+  "icons": [
+    {
+      "src": "/seci-logo.png",
+      "sizes": "192x192",
+      "type": "image/png"
+    }
+  ],
+  "start_url": ".",
+  "display": "standalone",
+  "theme_color": "#042954",
+  "background_color": "#ffffff"
+}
