@@ -70,7 +70,6 @@ const AVRGallery = () => {
         url ? <Image src={url} width={72} height={48} style={{ objectFit: 'cover', borderRadius: 4 }} /> : '—',
     },
     { title: 'Title', dataIndex: 'title', ellipsis: true },
-    { title: 'Service Type', dataIndex: 'serviceType', width: 130 },
     {
       title: 'Status',
       dataIndex: 'isActive',
@@ -196,11 +195,11 @@ const AVRGallery = () => {
         <Form form={form} layout="vertical" style={{ marginTop: 8 }} requiredMark={false}>
           <Form.Item
             name="title"
-            label={<span>Title <span style={{ color: 'red' }}>*</span></span>}
-            rules={[{ required: true, message: 'Enter title' }]}
+            label={<span>Title </span>}
+            // rules={[{ required: true, message: 'Enter title' }]}
             style={{ marginBottom: 10 }}
           >
-            <Input placeholder="e.g. Living Room Design" />
+            <Input placeholder="Enter Title" />
           </Form.Item>
 
           <Form.Item
