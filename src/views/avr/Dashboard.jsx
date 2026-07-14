@@ -222,12 +222,12 @@ const contactColumns = [
       </div>
     ),
   },
-  {
-    title: 'Subject',
-    dataIndex: 'subject',
-    ellipsis: { showTitle: false },
-    render: (v) => v ? <Tooltip title={v}>{v}</Tooltip> : '—',
-  },
+  // {
+  //   title: 'Subject',
+  //   dataIndex: 'subject',
+  //   ellipsis: { showTitle: false },
+  //   render: (v) => v ? <Tooltip title={v}>{v}</Tooltip> : '—',
+  // },
   {
     title: 'Message',
     dataIndex: 'message',
