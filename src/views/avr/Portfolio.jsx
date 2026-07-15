@@ -1,13 +1,32 @@
+/* eslint-disable react/react-in-jsx-scope */
 /* eslint-disable prettier/prettier */
 import { useState } from 'react'
 import {
-  Table, Button, Modal, Form, Input, Switch,
-  Space, Popconfirm, Tag, Image, ConfigProvider, Checkbox,
-  Upload, Progress,
+  Table,
+  Button,
+  Modal,
+  Form,
+  Input,
+  Switch,
+  Space,
+  Popconfirm,
+  Tag,
+  Image,
+  ConfigProvider,
+  Checkbox,
+  Upload,
+  Progress,
+  Row,
+  Col,
 } from 'antd'
 import {
-  PlusOutlined, EditOutlined, DeleteOutlined, SearchOutlined,
-  LoadingOutlined, EyeOutlined, DeleteFilled,
+  PlusOutlined,
+  EditOutlined,
+  DeleteOutlined,
+  SearchOutlined,
+  LoadingOutlined,
+  EyeOutlined,
+  DeleteFilled,
 } from '@ant-design/icons'
 import { CKEditor } from '@ckeditor/ckeditor5-react'
 import ClassicEditor from '@ckeditor/ckeditor5-build-classic'
@@ -16,79 +35,214 @@ import { uploadService } from '../../services/upload.service'
 import SingleImageUpload from '../../components/SingleImageUpload'
 
 const TABLE_HEADER_BG = '#042954'
-
+const IMAGE_CARD_SIZE = 104
 // ─── Multi Image Upload (gallery images) ────────────────────────────────────
-const MultiImageUpload = ({ images, onChange }) => {
+const MultiImageUpload = ({
+  images = [],
+  onChange,
+  width = IMAGE_CARD_SIZE,
+  height = IMAGE_CARD_SIZE,
+  maxCount = 20,
+}) => {
   const [uploadingCount, setUploadingCount] = useState(0)
   const [percent, setPercent] = useState(0)
 
+  const safeImages = Array.isArray(images) ? images : []
+  const isUploading = uploadingCount > 0
+
   const handleChange = async ({ fileList }) => {
-    // Only pick newly added files (no url yet, have originFileObj)
-    const newFiles = fileList.filter((f) => f.originFileObj && !f.url)
+    const availableSlots = maxCount - safeImages.length
+
+    if (availableSlots <= 0) return
+
+    const newFiles = fileList
+      .filter((file) => file.originFileObj && !file.url)
+      .slice(0, availableSlots)
+
     if (!newFiles.length) return
 
     setUploadingCount(newFiles.length)
     setPercent(10)
-    const timer = setInterval(() => setPercent((p) => (p < 85 ? p + 10 : p)), 200)
+
+    const timer = setInterval(() => {
+      setPercent((current) => (current < 85 ? current + 10 : current))
+    }, 200)
 
     try {
-      // Upload all selected files in parallel
       const urls = await Promise.all(
-        newFiles.map((f) =>
-          uploadService.uploadImage(f.originFileObj).then((res) => res.data.data.imageUrl)
-        )
+        newFiles.map((file) =>
+          uploadService
+            .uploadImage(file.originFileObj)
+            .then((response) => response?.data?.data?.imageUrl),
+        ),
       )
+
       clearInterval(timer)
       setPercent(100)
-      onChange([...images, ...urls])
-    } catch {
+
+      const validUrls = urls.filter(Boolean)
+
+      onChange([...safeImages, ...validUrls].slice(0, maxCount))
+    } catch (error) {
       clearInterval(timer)
       setPercent(0)
+
+      console.error('Gallery upload error:', error)
     } finally {
-      setTimeout(() => { setUploadingCount(0); setPercent(0) }, 400)
+      setTimeout(() => {
+        setUploadingCount(0)
+        setPercent(0)
+      }, 400)
     }
   }
 
-  const removeImage = (idx) => onChange(images.filter((_, i) => i !== idx))
-  const isUploading = uploadingCount > 0
+  const removeImage = (index) => {
+    onChange(safeImages.filter((_, imageIndex) => imageIndex !== index))
+  }
 
   return (
-    <div>
-      <div style={{ display: 'flex', flexWrap: 'wrap', gap: 8, marginBottom: images.length || isUploading ? 8 : 0 }}>
-        {images.map((url, idx) => (
-          <div key={idx} style={{ position: 'relative', width: 80, height: 80, borderRadius: 6, overflow: 'hidden' }}
-            className="avr-img-card">
-            <style>{`.avr-img-card:hover .avr-overlay { opacity: 1 !important; }`}</style>
-            <img src={url} alt={`gallery-${idx}`} style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
-            <div className="avr-overlay" style={{ position: 'absolute', inset: 0, background: 'rgba(0,0,0,0.5)', display: 'flex', alignItems: 'center', justifyContent: 'center', opacity: 0, transition: 'opacity 0.2s' }}>
-              <DeleteFilled style={{ color: '#fff', fontSize: 16, cursor: 'pointer' }} onClick={() => removeImage(idx)} />
+    <div
+      style={{
+        width: '100%',
+        minWidth: 0,
+      }}
+    >
+      <style>
+        {`
+          .portfolio-gallery-card:hover .portfolio-gallery-overlay {
+            opacity: 1 !important;
+          }
+        `}
+      </style>
+
+      <div
+        style={{
+          display: 'grid',
+          gridTemplateColumns: `repeat(auto-fill, ${width}px)`,
+          gap: 8,
+          width: '100%',
+          minWidth: 0,
+          alignItems: 'start',
+          justifyContent: 'start',
+        }}
+      >
+        {safeImages.map((url, index) => (
+          <div
+            key={`${url}-${index}`}
+            className="portfolio-gallery-card"
+            style={{
+              position: 'relative',
+              width,
+              height,
+              border: '1px solid #d9d9d9',
+              borderRadius: 8,
+              overflow: 'hidden',
+              background: '#fafafa',
+              boxSizing: 'border-box',
+            }}
+          >
+            <img
+              src={url}
+              alt={`gallery-${index + 1}`}
+              style={{
+                width: '100%',
+                height: '100%',
+                objectFit: 'cover',
+                display: 'block',
+              }}
+            />
+
+            <div
+              className="portfolio-gallery-overlay"
+              style={{
+                position: 'absolute',
+                inset: 0,
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                background: 'rgba(0,0,0,0.5)',
+                opacity: 0,
+                transition: 'opacity 0.2s',
+              }}
+            >
+              <DeleteFilled
+                onClick={() => removeImage(index)}
+                style={{
+                  color: '#fff',
+                  fontSize: 18,
+                  cursor: 'pointer',
+                }}
+              />
             </div>
           </div>
         ))}
 
-        {/* Upload trigger — multiple selection enabled */}
-        <Upload
-          accept="image/*"
-          showUploadList={false}
-          multiple
-          beforeUpload={() => false}
-          onChange={handleChange}
-          disabled={isUploading}
-        >
-          <div style={{ width: 80, height: 80, border: '1px dashed #d9d9d9', borderRadius: 6, display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', gap: 4, background: '#fafafa', cursor: isUploading ? 'not-allowed' : 'pointer' }}>
-            {isUploading
-              ? <LoadingOutlined style={{ fontSize: 18, color: '#1677ff' }} />
-              : <PlusOutlined style={{ fontSize: 16, color: '#555' }} />
-            }
-            <span style={{ fontSize: 11, color: '#555' }}>
-              {isUploading ? `${uploadingCount} uploading` : 'Add'}
-            </span>
-          </div>
-        </Upload>
+        {safeImages.length < maxCount && (
+          <Upload
+            accept="image/*"
+            showUploadList={false}
+            multiple
+            beforeUpload={() => false}
+            onChange={handleChange}
+            disabled={isUploading}
+          >
+            <div
+              style={{
+                width,
+                height,
+                border: '1px dashed #d9d9d9',
+                borderRadius: 8,
+                display: 'flex',
+                flexDirection: 'column',
+                alignItems: 'center',
+                justifyContent: 'center',
+                gap: 6,
+                background: '#fafafa',
+                cursor: isUploading ? 'not-allowed' : 'pointer',
+                boxSizing: 'border-box',
+              }}
+            >
+              {isUploading ? (
+                <LoadingOutlined
+                  style={{
+                    fontSize: 20,
+                    color: '#1677ff',
+                  }}
+                />
+              ) : (
+                <PlusOutlined
+                  style={{
+                    fontSize: 18,
+                    color: '#555',
+                  }}
+                />
+              )}
+
+              <span
+                style={{
+                  fontSize: 12,
+                  color: '#555',
+                  textAlign: 'center',
+                }}
+              >
+                {isUploading ? `${uploadingCount} uploading` : 'Add'}
+              </span>
+            </div>
+          </Upload>
+        )}
       </div>
 
       {isUploading && (
-        <Progress percent={percent} showInfo={false} strokeColor="#1677ff" size="small" style={{ marginTop: 2 }} />
+        <Progress
+          percent={percent}
+          showInfo={false}
+          size="small"
+          style={{
+            maxWidth: 220,
+            marginTop: 8,
+            marginBottom: 0,
+          }}
+        />
       )}
     </div>
   )
@@ -97,9 +251,17 @@ const MultiImageUpload = ({ images, onChange }) => {
 // ─── Main Page ───────────────────────────────────────────────────────────────
 const Portfolio = () => {
   const {
-    data, loading, search, activeOnly, pagination,
-    handleSearch, handleActiveToggle, handlePageChange,
-    addItem, updateItem, deleteItem,
+    data,
+    loading,
+    search,
+    activeOnly,
+    pagination,
+    handleSearch,
+    handleActiveToggle,
+    handlePageChange,
+    addItem,
+    updateItem,
+    deleteItem,
   } = usePortfolio()
 
   const [modalOpen, setModalOpen] = useState(false)
@@ -172,7 +334,11 @@ const Portfolio = () => {
       dataIndex: 'thumbnailImage',
       width: 90,
       render: (url) =>
-        url ? <Image src={url} width={64} height={44} style={{ objectFit: 'cover', borderRadius: 4 }} /> : '—',
+        url ? (
+          <Image src={url} width={64} height={44} style={{ objectFit: 'cover', borderRadius: 4 }} />
+        ) : (
+          '—'
+        ),
     },
     { title: 'Title', dataIndex: 'title', ellipsis: true },
     { title: 'Category', dataIndex: 'category', width: 130 },
@@ -195,7 +361,12 @@ const Portfolio = () => {
       render: (_, record) => (
         <Space>
           <Button size="small" icon={<EditOutlined />} onClick={() => openEdit(record)} />
-          <Popconfirm title="Delete this portfolio?" onConfirm={() => deleteItem(record._id)} okText="Yes" cancelText="No">
+          <Popconfirm
+            title="Delete this portfolio?"
+            onConfirm={() => deleteItem(record._id)}
+            okText="Yes"
+            cancelText="No"
+          >
             <Button size="small" danger icon={<DeleteOutlined />} />
           </Popconfirm>
         </Space>
@@ -205,14 +376,28 @@ const Portfolio = () => {
 
   return (
     <div>
-      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 16, flexWrap: 'wrap', gap: 8 }}>
+      <div
+        style={{
+          display: 'flex',
+          justifyContent: 'space-between',
+          alignItems: 'center',
+          marginBottom: 16,
+          flexWrap: 'wrap',
+          gap: 8,
+        }}
+      >
         <h4 style={{ margin: 0, color: '#042954', fontWeight: 700 }}>Portfolio</h4>
-        <Button type="primary" icon={<PlusOutlined />} onClick={openAdd} style={{ background: '#042954' }}>
+        <Button
+          type="primary"
+          icon={<PlusOutlined />}
+          onClick={openAdd}
+          style={{ background: '#042954' }}
+        >
           Add Portfolio
         </Button>
       </div>
 
-    <div
+      <div
         style={{
           display: 'flex',
           alignItems: 'flex-end',
@@ -264,8 +449,7 @@ const Portfolio = () => {
               fontWeight: 600,
               color: '#333',
             }}
-          >
-          </label>
+          ></label>
 
           <div
             style={{
@@ -274,24 +458,39 @@ const Portfolio = () => {
               alignItems: 'center',
             }}
           >
-            <Checkbox
-              checked={activeOnly}
-              onChange={(e) => handleActiveToggle(e.target.checked)}
-            >
+            <Checkbox checked={activeOnly} onChange={(e) => handleActiveToggle(e.target.checked)}>
               Active
             </Checkbox>
           </div>
         </div>
       </div>
 
-      <ConfigProvider theme={{ components: { Table: { headerBg: TABLE_HEADER_BG, headerColor: '#fff', headerSortActiveBg: '#021933', headerSortHoverBg: '#063a70' } } }}>
+      <ConfigProvider
+        theme={{
+          components: {
+            Table: {
+              headerBg: TABLE_HEADER_BG,
+              headerColor: '#fff',
+              headerSortActiveBg: '#021933',
+              headerSortHoverBg: '#063a70',
+            },
+          },
+        }}
+      >
         <Table
           dataSource={Array.isArray(data) ? data : []}
           columns={columns}
           rowKey="_id"
           loading={loading}
           scroll={{ x: 1000 }}
-          pagination={{ current: pagination.current, pageSize: pagination.pageSize, total: pagination.total, onChange: handlePageChange, showSizeChanger: false, responsive: true }}
+          pagination={{
+            current: pagination.current,
+            pageSize: pagination.pageSize,
+            total: pagination.total,
+            onChange: handlePageChange,
+            showSizeChanger: false,
+            responsive: true,
+          }}
           size="middle"
           style={{ borderRadius: 8, overflow: 'hidden' }}
         />
@@ -306,29 +505,67 @@ const Portfolio = () => {
         destroyOnHidden
       >
         <Form form={form} layout="vertical" style={{ marginTop: 8 }} requiredMark={false}>
-
           {/* Row 1 — Title + Slug + Category */}
           <div style={{ display: 'flex', gap: 12, flexWrap: 'wrap' }}>
-            <Form.Item name="title" label={<span>Title <span style={{ color: 'red' }}>*</span></span>} rules={[{ required: true, message: 'Enter title' }]} style={{ flex: 1, minWidth: 160, marginBottom: 10 }}>
+            <Form.Item
+              name="title"
+              label={
+                <span>
+                  Title <span style={{ color: 'red' }}>*</span>
+                </span>
+              }
+              rules={[{ required: true, message: 'Enter title' }]}
+              style={{ flex: 1, minWidth: 160, marginBottom: 10 }}
+            >
               <Input placeholder="Modern Villa Design" />
             </Form.Item>
-            <Form.Item name="slug" label={<span>Slug <span style={{ color: 'red' }}>*</span></span>} rules={[{ required: true, message: 'Enter slug' }]} style={{ flex: 1, minWidth: 160, marginBottom: 10 }}>
+            <Form.Item
+              name="slug"
+              label={
+                <span>
+                  Slug <span style={{ color: 'red' }}>*</span>
+                </span>
+              }
+              rules={[{ required: true, message: 'Enter slug' }]}
+              style={{ flex: 1, minWidth: 160, marginBottom: 10 }}
+            >
               <Input placeholder="modern-villa-design" />
             </Form.Item>
-            <Form.Item name="category" label={<span>Category <span style={{ color: 'red' }}>*</span></span>} rules={[{ required: true, message: 'Enter category' }]} style={{ flex: 1, minWidth: 140, marginBottom: 10 }}>
+            <Form.Item
+              name="category"
+              label={
+                <span>
+                  Category <span style={{ color: 'red' }}>*</span>
+                </span>
+              }
+              rules={[{ required: true, message: 'Enter category' }]}
+              style={{ flex: 1, minWidth: 140, marginBottom: 10 }}
+            >
               <Input placeholder="e.g. Residential" />
             </Form.Item>
           </div>
 
           {/* Row 2 — Client + Location + Duration */}
           <div style={{ display: 'flex', gap: 12, flexWrap: 'wrap' }}>
-            <Form.Item name="clientName" label="Client Name" style={{ flex: 1, minWidth: 140, marginBottom: 10 }}>
+            <Form.Item
+              name="clientName"
+              label="Client Name"
+              style={{ flex: 1, minWidth: 140, marginBottom: 10 }}
+            >
               <Input placeholder="Mr. Sharma" />
             </Form.Item>
-            <Form.Item name="location" label="Location" style={{ flex: 1, minWidth: 140, marginBottom: 10 }}>
+            <Form.Item
+              name="location"
+              label="Location"
+              style={{ flex: 1, minWidth: 140, marginBottom: 10 }}
+            >
               <Input placeholder="Mumbai" />
             </Form.Item>
-            <Form.Item name="duration" label="Duration" style={{ flex: 1, minWidth: 120, marginBottom: 10 }}>
+            <Form.Item
+              name="duration"
+              label="Duration"
+              style={{ flex: 1, minWidth: 120, marginBottom: 10 }}
+            >
               <Input placeholder="3 months" />
             </Form.Item>
           </div>
@@ -339,34 +576,140 @@ const Portfolio = () => {
           </Form.Item>
 
           {/* Row 3 — Thumbnail + Banner (SingleImageUpload) */}
-          <div style={{ display: 'flex', gap: 16, flexWrap: 'wrap', marginBottom: 10 }}>
+          {/* <div style={{ display: 'flex', gap: 16, flexWrap: 'wrap', marginBottom: 10 }}>
             <div style={{ flex: 1, minWidth: 0 }}>
-              <Form.Item label={<span>Thumbnail Image <span style={{ color: 'red' }}>*</span></span>} style={{ marginBottom: 0 }}>
-                <SingleImageUpload value={thumbnailUrl} onChange={setThumbnailUrl} width="100%" height={104} />
+              <Form.Item
+                label={
+                  <span>
+                    Thumbnail Image <span style={{ color: 'red' }}>*</span>
+                  </span>
+                }
+                style={{ marginBottom: 0 }}
+              >
+                <SingleImageUpload
+                  value={thumbnailUrl}
+                  onChange={setThumbnailUrl}
+                  width="100%"
+                  height={104}
+                />
               </Form.Item>
             </div>
             <div style={{ flex: 1, minWidth: 0 }}>
-              <Form.Item label={<span>Banner Image <span style={{ color: 'red' }}>*</span></span>} style={{ marginBottom: 0 }}>
-                <SingleImageUpload value={bannerUrl} onChange={setBannerUrl} width="100%" height={104} />
+              <Form.Item
+                label={
+                  <span>
+                    Banner Image <span style={{ color: 'red' }}>*</span>
+                  </span>
+                }
+                style={{ marginBottom: 0 }}
+              >
+                <SingleImageUpload
+                  value={bannerUrl}
+                  onChange={setBannerUrl}
+                  width="100%"
+                  height={104}
+                />
               </Form.Item>
             </div>
-          </div>
+          </div> */}
 
           {/* Gallery Images — multi upload */}
-          <Form.Item label="Gallery Images" style={{ marginBottom: 10 }}>
+          {/* <Form.Item label="Gallery Images" style={{ marginBottom: 10 }}>
             <MultiImageUpload images={galleryImages} onChange={setGalleryImages} />
-          </Form.Item>
+          </Form.Item> */}
 
+          {/* Thumbnail + Banner + Gallery Images */}
+          <Row gutter={[16, 14]} align="top" style={{ marginBottom: 12 }}>
+            <Col xs={24} sm={12} md={5}>
+              <Form.Item
+                label={
+                  <span>
+                    Thumbnail Image <span style={{ color: 'red' }}>*</span>
+                  </span>
+                }
+                style={{ marginBottom: 0 }}
+              >
+                <SingleImageUpload
+                  value={thumbnailUrl}
+                  onChange={setThumbnailUrl}
+                  width={IMAGE_CARD_SIZE}
+                  height={IMAGE_CARD_SIZE}
+                />
+              </Form.Item>
+            </Col>
+
+            <Col xs={24} sm={12} md={5}>
+              <Form.Item
+                label={
+                  <span>
+                    Banner Image <span style={{ color: 'red' }}>*</span>
+                  </span>
+                }
+                style={{ marginBottom: 0 }}
+              >
+                <SingleImageUpload
+                  value={bannerUrl}
+                  onChange={setBannerUrl}
+                  width={IMAGE_CARD_SIZE}
+                  height={IMAGE_CARD_SIZE}
+                />
+              </Form.Item>
+            </Col>
+
+            <Col
+              xs={24}
+              sm={24}
+              md={14}
+              style={{
+                minWidth: 0,
+              }}
+            >
+              <Form.Item label="Gallery Images" style={{ marginBottom: 0 }}>
+                <MultiImageUpload
+                  images={galleryImages}
+                  onChange={setGalleryImages}
+                  width={IMAGE_CARD_SIZE}
+                  height={IMAGE_CARD_SIZE}
+                  maxCount={20}
+                />
+              </Form.Item>
+            </Col>
+          </Row>
           {/* CKEditor */}
-          <Form.Item label={<span>Description <span style={{ color: 'red' }}>*</span></span>} style={{ marginBottom: 10 }}>
-            <div style={{ border: '1px solid #d9d9d9', borderRadius: 6, overflow: 'hidden' }}>
+          <Form.Item
+            label={
+              <span>
+                Description <span style={{ color: 'red' }}>*</span>
+              </span>
+            }
+            style={{ marginBottom: 10 }}
+          >
+            <div
+              className="blog-editor-wrapper"
+              style={{ border: '1px solid #d9d9d9', borderRadius: 6, overflow: 'hidden' }}
+            >
               <CKEditor
                 editor={ClassicEditor}
                 data={description}
                 onChange={(_, editor) => setDescription(editor.getData())}
                 config={{
-                  toolbar: ['heading', '|', 'bold', 'italic', 'underline', 'link', '|',
-                    'bulletedList', 'numberedList', 'blockQuote', '|', 'insertTable', '|', 'undo', 'redo'],
+                  toolbar: [
+                    'heading',
+                    '|',
+                    'bold',
+                    'italic',
+                    'underline',
+                    'link',
+                    '|',
+                    'bulletedList',
+                    'numberedList',
+                    'blockQuote',
+                    '|',
+                    'insertTable',
+                    '|',
+                    'undo',
+                    'redo',
+                  ],
                 }}
               />
             </div>
@@ -374,17 +717,29 @@ const Portfolio = () => {
 
           {/* Featured + Status */}
           <div style={{ display: 'flex', gap: 24, marginBottom: 12 }}>
-            <Form.Item name="featured" label="Featured" valuePropName="checked" style={{ marginBottom: 0 }}>
+            <Form.Item
+              name="featured"
+              label="Featured"
+              valuePropName="checked"
+              style={{ marginBottom: 0 }}
+            >
               <Switch checkedChildren="Yes" unCheckedChildren="No" />
             </Form.Item>
-            <Form.Item name="activeStatus" label="Status" valuePropName="checked" style={{ marginBottom: 0 }}>
+            <Form.Item
+              name="activeStatus"
+              label="Status"
+              valuePropName="checked"
+              style={{ marginBottom: 0 }}
+            >
               <Switch checkedChildren="Active" unCheckedChildren="Inactive" />
             </Form.Item>
           </div>
 
           {/* Footer */}
           <div style={{ display: 'flex', justifyContent: 'flex-end', gap: 8 }}>
-            <Button onClick={() => setModalOpen(false)} disabled={submitting}>Cancel</Button>
+            <Button onClick={() => setModalOpen(false)} disabled={submitting}>
+              Cancel
+            </Button>
             <Button
               type="primary"
               onClick={handleSubmit}
