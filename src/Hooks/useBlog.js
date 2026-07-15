@@ -348,6 +348,18 @@ export const useBlog = () => {
     }
   }
 
+  const toggleStatus = async (id, currentStatus) => {
+    try {
+      const response = await blogService.update(id, { isActive: !currentStatus })
+      toast.success(getResponseMessage(response, 'Status updated'))
+      await fetchAll(search, activeOnly, pagination.current, pagination.pageSize)
+      return response
+    } catch (error) {
+      toast.error(getErrorMessage(error, 'Failed to update status'))
+      throw error
+    }
+  }
+
   const getBlogById = async (id) => {
     const response = await blogService.getById(id)
     return getResponseData(response)
@@ -377,5 +389,6 @@ export const useBlog = () => {
     getBlogById,
     getBlogByUrl,
     uploadImage,
+    toggleStatus,
   }
 }

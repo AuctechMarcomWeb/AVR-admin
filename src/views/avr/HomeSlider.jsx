@@ -1,8 +1,9 @@
+﻿/* eslint-disable react/react-in-jsx-scope */
 /* eslint-disable prettier/prettier */
 import { useState } from 'react'
 import {
   Table, Button, Modal, Form, Input, Switch,
-  Space, Popconfirm, Tag, Image, ConfigProvider, Checkbox,
+  Space, Popconfirm, Image, ConfigProvider, Checkbox,
 } from 'antd'
 import {
   PlusOutlined, EditOutlined, DeleteOutlined, SearchOutlined,
@@ -10,14 +11,14 @@ import {
 import { useHomeSlider } from '../../Hooks/useHomeSlider'
 import SingleImageUpload from '../../components/SingleImageUpload'
 
-const TABLE_HEADER_BG = '#042954'
+const TABLE_HEADER_BG = '#000000'
 
 // ─── Main Page ──────────────────────────────────────────────────────────────
 const HomeSlider = () => {
   const {
     data, loading, search, activeOnly, pagination,
     handleSearch, handleActiveToggle, handlePageChange,
-    addItem, updateItem, deleteItem,
+    addItem, updateItem, deleteItem, toggleStatus,
   } = useHomeSlider()
 
   const [modalOpen, setModalOpen] = useState(false)
@@ -62,7 +63,7 @@ const HomeSlider = () => {
   const columns = [
     {
       title: 'Sr.No.',
-      width: 70,
+      width: 75,
       render: (_, __, i) => (pagination.current - 1) * pagination.pageSize + i + 1,
     },
     {
@@ -80,8 +81,15 @@ const HomeSlider = () => {
     {
       title: 'Status',
       dataIndex: 'isActive',
-      width: 90,
-      render: (v) => <Tag color={v ? 'green' : 'red'}>{v ? 'Active' : 'Inactive'}</Tag>,
+      width: 110,
+      render: (val, record) => (
+        <Switch
+          checked={val}
+          checkedChildren="Active"
+          unCheckedChildren="Inactive"
+          onChange={() => toggleStatus(record._id, val)}
+        />
+      ),
     },
     {
       title: 'Actions',
@@ -101,8 +109,8 @@ const HomeSlider = () => {
     <div>
       {/* Header */}
       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 16, flexWrap: 'wrap', gap: 8 }}>
-        <h4 style={{ margin: 0, color: '#042954', fontWeight: 700 }}>Home Slider</h4>
-        <Button type="primary" icon={<PlusOutlined />} onClick={openAdd} style={{ background: '#042954' }}>
+        <h4 style={{ margin: 0, color: '#000000', fontWeight: 700 }}>Home Slider</h4>
+        <Button type="primary" icon={<PlusOutlined />} onClick={openAdd} style={{ background: '#000000', color: '#ffffff' }}>
           Add Slider
         </Button>
       </div>
@@ -181,7 +189,7 @@ const HomeSlider = () => {
 
       
       {/* Table */}
-      <ConfigProvider theme={{ components: { Table: { headerBg: TABLE_HEADER_BG, headerColor: '#fff', headerSortActiveBg: '#021933', headerSortHoverBg: '#063a70' } } }}>
+      <ConfigProvider theme={{ components: { Table: { headerBg: TABLE_HEADER_BG, headerColor: '#ffffff', headerSortActiveBg: '#1a1a1a', headerSortHoverBg: '#333333' } } }}>
         <Table
           dataSource={Array.isArray(data) ? data : []}
           columns={columns}
@@ -263,7 +271,7 @@ const HomeSlider = () => {
               onClick={handleSubmit}
               loading={submitting}
               style={{
-                background: '#042954',
+                background: '#000000', color: '#ffffff',
                 minWidth: 90,
               }}
             >

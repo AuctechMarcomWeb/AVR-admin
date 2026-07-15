@@ -69,6 +69,20 @@ export const useHomeSlider = () => {
       })
   }
 
+  const toggleStatus = (id, currentStatus) => {
+    return homeSliderService
+      .update(id, { isActive: !currentStatus })
+      .then((res) => {
+        toast.success(res?.data?.message || 'Status updated')
+        fetchAll(search, activeOnly, pagination.current)
+        return res
+      })
+      .catch((err) => {
+        toast.error(err?.response?.data?.message || 'Failed to update status')
+        return Promise.reject(err)
+      })
+  }
+
   const deleteItem = (id) => {
     homeSliderService
       .remove(id)
@@ -82,6 +96,6 @@ export const useHomeSlider = () => {
   return {
     data, loading, search, activeOnly, pagination,
     handleSearch, handleActiveToggle, handlePageChange,
-    addItem, updateItem, deleteItem, uploadImage,
+    addItem, updateItem, deleteItem, uploadImage, toggleStatus,
   }
 }

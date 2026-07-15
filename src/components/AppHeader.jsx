@@ -19,7 +19,7 @@ const AppHeader = () => {
     <CHeader
       position="sticky"
       className="p-0"
-      style={{ backgroundColor: '#042954', borderBottom: '1px solid #021933' }}
+      style={{ backgroundColor: '#000000', borderBottom: '2px solid #FFCC00' }}
     >
       <CContainer fluid className="px-3 d-flex align-items-center justify-content-between" style={{ height: '56px' }}>
 

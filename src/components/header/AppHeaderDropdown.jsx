@@ -1,4 +1,4 @@
-/* eslint-disable prettier/prettier */
+﻿/* eslint-disable prettier/prettier */
 import { useContext, useState } from 'react'
 import { Dropdown, Modal, Form, Input, Button, Descriptions, Tag, Spin } from 'antd'
 import { LogoutOutlined, DownOutlined, UserOutlined, LockOutlined } from '@ant-design/icons'
@@ -71,7 +71,7 @@ const AppHeaderDropdown = () => {
       key: 'info',
       label: (
         <div style={{ padding: '4px 0', minWidth: '160px' }}>
-          <div style={{ fontWeight: 700, fontSize: '14px', color: '#042954' }}>{name}</div>
+          <div style={{ fontWeight: 700, fontSize: '14px', color: '#000000' }}>{name}</div>
           <div style={{ fontSize: '12px', color: '#888', textTransform: 'capitalize' }}>{displayRole}</div>
         </div>
       ),
@@ -131,7 +131,7 @@ const AppHeaderDropdown = () => {
         footer={
           <Button
             icon={<LockOutlined />}
-            style={{ background: '#042954', color: '#fff', border: 'none' }}
+            style={{ background: '#000000', color: '#ffffff', border: 'none' }}
             onClick={() => { setProfileOpen(false); setPwdOpen(true) }}
           >
             Update Password
@@ -150,7 +150,7 @@ const AppHeaderDropdown = () => {
               <Descriptions.Item label="Gender">{profileData.gender || '—'}</Descriptions.Item>
               <Descriptions.Item label="Address">{profileData.address || '—'}</Descriptions.Item>
               <Descriptions.Item label="Role">
-                <Tag color="#042954">{profileData.role || '—'}</Tag>
+                <Tag color="#000000">{profileData.role || '—'}</Tag>
               </Descriptions.Item>
               <Descriptions.Item label="Status">
                 <Tag color={profileData.isBlock ? 'red' : 'green'}>
@@ -169,7 +169,7 @@ const AppHeaderDropdown = () => {
         onCancel={() => { setPwdOpen(false); pwdForm.resetFields() }}
         onOk={() => pwdForm.submit()}
         okText="Update"
-        okButtonProps={{ style: { background: '#042954' }, loading: pwdSubmitting }}
+        okButtonProps={{ style: { background: '#000000', color: '#ffffff' }, loading: pwdSubmitting }}
         width="min(400px, 95vw)"
         destroyOnHidden
         afterOpenChange={(open) => {

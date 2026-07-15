@@ -1,4 +1,4 @@
-/* eslint-disable prettier/prettier */
+﻿/* eslint-disable prettier/prettier */
 import { useEffect, useRef, useState } from 'react'
 import { Card, Row, Col, Table, Tag, Badge, ConfigProvider, Skeleton, Tooltip } from 'antd'
 import {
@@ -10,8 +10,8 @@ import { useNavigate } from 'react-router-dom'
 import dayjs from 'dayjs'
 import { useDashboard } from '../../Hooks/useDashboard'
 
-const BRAND = '#042954'
-const TABLE_HEADER_BG = '#042954'
+const BRAND = '#000000'
+const TABLE_HEADER_BG = '#000000'
 
 const STATUS_COLORS = {
   Pending: 'orange',
@@ -88,14 +88,14 @@ const AnimatedStat = ({ value, color }) => {
 
 /* ─── Stat card config ─── */
 const STAT_CARDS = [
-  {
-    title: 'Home Sliders',
-    icon: <PictureOutlined />,
-    color: '#1890ff',
-    path: '/home-slider',
-    value: (c) => c?.sliders?.total ?? 0,
-    sub: (c) => `Active: ${c?.sliders?.active ?? 0}  ·  Inactive: ${c?.sliders?.inactive ?? 0}`,
-  },
+  // {
+  //   title: 'Home Sliders',
+  //   icon: <PictureOutlined />,
+  //   color: '#1890ff',
+  //   path: '/home-slider',
+  //   value: (c) => c?.sliders?.total ?? 0,
+  //   sub: (c) => `Active: ${c?.sliders?.active ?? 0}  ·  Inactive: ${c?.sliders?.inactive ?? 0}`,
+  // },
   {
     title: 'Gallery Items',
     icon: <AppstoreOutlined />,
@@ -164,7 +164,7 @@ const consultationColumns = [
     width: 220,
     render: (_, r) => (
       <div style={{ lineHeight: 1.6 }}>
-        <div style={{ fontWeight: 600, color: '#042954', fontSize: 13 }}>{r.name}</div>
+        <div style={{ fontWeight: 600, color: '#000000', fontSize: 13 }}>{r.name}</div>
         <div style={{ fontSize: 12, color: '#555' }}>
           <MailOutlined style={{ marginRight: 4, color: '#888' }} />
           {r.email}
@@ -222,12 +222,12 @@ const contactColumns = [
       </div>
     ),
   },
-  {
-    title: 'Subject',
-    dataIndex: 'subject',
-    ellipsis: { showTitle: false },
-    render: (v) => v ? <Tooltip title={v}>{v}</Tooltip> : '—',
-  },
+  // {
+  //   title: 'Subject',
+  //   dataIndex: 'subject',
+  //   ellipsis: { showTitle: false },
+  //   render: (v) => v ? <Tooltip title={v}>{v}</Tooltip> : '—',
+  // },
   {
     title: 'Message',
     dataIndex: 'message',

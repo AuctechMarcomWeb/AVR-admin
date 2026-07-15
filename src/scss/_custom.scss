@@ -128,3 +128,76 @@
 
 
 
+
+
+/* ── ARV Brand Sidebar Theme ───────────────────────────────── */
+.arv-sidebar {
+  background-color: #000000 !important;
+  border-right: 2px solid #FFCC00 !important;
+
+  /* Sidebar nav background */
+  .simplebar-content-wrapper,
+  .simplebar-content,
+  .c-sidebar-nav,
+  ul.c-sidebar-nav,
+  nav {
+    background-color: #000000 !important;
+  }
+
+  /* All nav links */
+  .nav-link,
+  .c-nav-link,
+  a.nav-link {
+    color: #cccccc !important;
+    border-radius: 6px;
+    margin: 2px 8px;
+    transition: background 0.2s, color 0.2s;
+
+    .nav-icon,
+    svg {
+      color: #cccccc !important;
+      fill: #cccccc !important;
+    }
+  }
+
+  /* Hover state */
+  .nav-link:hover,
+  .c-nav-link:hover {
+    background-color: #1a1a1a !important;
+    color: #FFCC00 !important;
+
+    .nav-icon,
+    svg {
+      color: #FFCC00 !important;
+      fill: #FFCC00 !important;
+    }
+  }
+
+  /* Active / current route */
+  .nav-link.active,
+  .c-nav-link.active,
+  .nav-link.active-exact {
+    background-color: #FFCC00 !important;
+    color: #000000 !important;
+    font-weight: 600;
+
+    .nav-icon,
+    svg {
+      color: #000000 !important;
+      fill: #000000 !important;
+    }
+  }
+  /* Scrollbar inside sidebar */
+  .simplebar-scrollbar::before {
+    background: #FFCC00 !important;
+  }
+}
+
+/* ── ARV Header Theme ──────────────────────────────────────── */
+.c-header,
+header.c-header {
+  /* hamburger icon color */
+  .c-header-toggler-icon {
+    background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 30 30'%3e%3cpath stroke='%23FFCC00' stroke-linecap='round' stroke-miterlimit='10' stroke-width='2' d='M4 7h22M4 15h22M4 23h22'/%3e%3c/svg%3e") !important;
+  }
+}

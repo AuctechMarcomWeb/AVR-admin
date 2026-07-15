@@ -45,6 +45,20 @@ export const useContact = () => {
       })
   }
 
+  const toggleRead = (id, currentStatus) => {
+    return contactService
+      .update(id, { isRead: !currentStatus })
+      .then((res) => {
+        toast.success(!currentStatus ? 'Marked as read' : 'Marked as unread')
+        fetchAll(search, pagination.current)
+        return res
+      })
+      .catch((err) => {
+        toast.error(err?.response?.data?.message || 'Failed to update')
+        return Promise.reject(err)
+      })
+  }
+
   const deleteItem = (id) => {
     contactService
       .remove(id)
@@ -58,6 +72,6 @@ export const useContact = () => {
   return {
     data, loading, search, pagination,
     handleSearch, handlePageChange,
-    markAsRead, deleteItem,
+    markAsRead, toggleRead, deleteItem,
   }
 }

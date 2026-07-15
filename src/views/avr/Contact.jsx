@@ -1,4 +1,4 @@
-/* eslint-disable prettier/prettier */
+﻿/* eslint-disable prettier/prettier */
 import { useState } from 'react'
 import {
   Table,
@@ -6,9 +6,9 @@ import {
   Modal,
   Space,
   Popconfirm,
-  Tag,
   ConfigProvider,
   Input,
+  Switch,
   Descriptions,
   Badge,
 } from 'antd'
@@ -22,7 +22,7 @@ import {
 import dayjs from 'dayjs'
 import { useContact } from '../../Hooks/useContact'
 
-const TABLE_HEADER_BG = '#042954'
+const TABLE_HEADER_BG = '#000000'
 
 const Contact = () => {
   const {
@@ -33,6 +33,7 @@ const Contact = () => {
     handleSearch,
     handlePageChange,
     markAsRead,
+    toggleRead,
     deleteItem,
   } = useContact()
 
@@ -41,7 +42,7 @@ const Contact = () => {
   const columns = [
     {
       title: 'Sr.No.',
-      width: 70,
+      width: 75,
       render: (_, __, index) =>
         (pagination.current - 1) * pagination.pageSize + index + 1,
     },
@@ -53,7 +54,7 @@ const Contact = () => {
           <div
             style={{
               fontWeight: 600,
-              color: '#042954',
+              color: '#000000',
               fontSize: 13,
             }}
           >
@@ -104,11 +105,14 @@ const Contact = () => {
     {
       title: 'Read',
       dataIndex: 'isRead',
-      width: 90,
-      render: (value) => (
-        <Tag color={value ? 'green' : 'orange'}>
-          {value ? 'Read' : 'Unread'}
-        </Tag>
+      width: 110,
+      render: (val, record) => (
+        <Switch
+          checked={val}
+          checkedChildren="Read"
+          unCheckedChildren="Unread"
+          onChange={() => toggleRead(record._id, val)}
+        />
       ),
     },
     {
@@ -173,7 +177,7 @@ const Contact = () => {
         <h4
           style={{
             margin: 0,
-            color: '#042954',
+            color: '#000000',
             fontWeight: 700,
           }}
         >
@@ -232,9 +236,9 @@ const Contact = () => {
           components: {
             Table: {
               headerBg: TABLE_HEADER_BG,
-              headerColor: '#fff',
-              headerSortActiveBg: '#021933',
-              headerSortHoverBg: '#063a70',
+              headerColor: '#ffffff',
+              headerSortActiveBg: '#1a1a1a',
+              headerSortHoverBg: '#333333',
             },
           },
         }}
@@ -270,7 +274,7 @@ const Contact = () => {
             <Button
               type="primary"
               style={{
-                background: '#042954',
+                background: '#000000',
               }}
               onClick={handleMarkAsRead}
             >

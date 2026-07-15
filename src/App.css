@@ -215,3 +215,8 @@ body {
 .crm-table .ant-table-wrapper {
   overflow-x: auto;
 }
+    .blog-editor-wrapper .ck-editor__editable_inline {
+      min-height: 250px;
+      max-height: 350px;
+      overflow-y: auto;
+    }
