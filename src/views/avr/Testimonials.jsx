@@ -1,4 +1,4 @@
-/* eslint-disable prettier/prettier */
+﻿/* eslint-disable prettier/prettier */
 import { useState } from 'react'
 import {
   Table, Button, Modal, Form, Input, Switch,
@@ -8,7 +8,7 @@ import { PlusOutlined, EditOutlined, DeleteOutlined, SearchOutlined, StarFilled 
 import { useTestimonial } from '../../Hooks/useTestimonial'
 import SingleImageUpload from '../../components/SingleImageUpload'
 
-const TABLE_HEADER_BG = '#042954'
+const TABLE_HEADER_BG = '#000000'
 
 // ─── Decimal Star Display ────────────────────────────────────────────────────
 // Shows filled/partial/empty stars for decimal ratings like 3.7, 4.2
@@ -133,8 +133,8 @@ const Testimonials = () => {
   return (
     <div>
       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 16, flexWrap: 'wrap', gap: 8 }}>
-        <h4 style={{ margin: 0, color: '#042954', fontWeight: 700 }}>Testimonials</h4>
-        <Button type="primary" icon={<PlusOutlined />} onClick={openAdd} style={{ background: '#042954' }}>
+        <h4 style={{ margin: 0, color: '#000000', fontWeight: 700 }}>Testimonials</h4>
+        <Button type="primary" icon={<PlusOutlined />} onClick={openAdd} style={{ background: '#000000', color: '#ffffff' }}>
           Add Testimonial
         </Button>
       </div>
@@ -151,7 +151,7 @@ const Testimonials = () => {
         <Checkbox checked={activeOnly} onChange={(e) => handleActiveToggle(e.target.checked)}>Active</Checkbox>
       </div>
 
-      <ConfigProvider theme={{ components: { Table: { headerBg: TABLE_HEADER_BG, headerColor: '#fff', headerSortActiveBg: '#021933', headerSortHoverBg: '#063a70' } } }}>
+      <ConfigProvider theme={{ components: { Table: { headerBg: TABLE_HEADER_BG, headerColor: '#ffffff', headerSortActiveBg: '#1a1a1a', headerSortHoverBg: '#333333' } } }}>
         <Table
           dataSource={Array.isArray(data) ? data : []}
           columns={columns}
@@ -252,7 +252,7 @@ const Testimonials = () => {
               type="primary"
               onClick={handleSubmit}
               loading={submitting}
-              style={{ background: '#042954', minWidth: 90 }}
+              style={{ background: '#000000', minWidth: 90 }}
             >
               {submitting ? 'Saving...' : editRecord ? 'Update' : 'Add'}
             </Button>

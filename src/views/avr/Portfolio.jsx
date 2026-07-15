@@ -1,4 +1,4 @@
-/* eslint-disable react/react-in-jsx-scope */
+﻿/* eslint-disable react/react-in-jsx-scope */
 /* eslint-disable prettier/prettier */
 import { useState } from 'react'
 import {
@@ -34,7 +34,7 @@ import { usePortfolio } from '../../Hooks/usePortfolio'
 import { uploadService } from '../../services/upload.service'
 import SingleImageUpload from '../../components/SingleImageUpload'
 
-const TABLE_HEADER_BG = '#042954'
+const TABLE_HEADER_BG = '#000000'
 const IMAGE_CARD_SIZE = 104
 // ─── Multi Image Upload (gallery images) ────────────────────────────────────
 const MultiImageUpload = ({
@@ -386,12 +386,12 @@ const Portfolio = () => {
           gap: 8,
         }}
       >
-        <h4 style={{ margin: 0, color: '#042954', fontWeight: 700 }}>Portfolio</h4>
+        <h4 style={{ margin: 0, color: '#000000', fontWeight: 700 }}>Portfolio</h4>
         <Button
           type="primary"
           icon={<PlusOutlined />}
           onClick={openAdd}
-          style={{ background: '#042954' }}
+          style={{ background: '#000000', color: '#ffffff' }}
         >
           Add Portfolio
         </Button>
@@ -470,9 +470,9 @@ const Portfolio = () => {
           components: {
             Table: {
               headerBg: TABLE_HEADER_BG,
-              headerColor: '#fff',
-              headerSortActiveBg: '#021933',
-              headerSortHoverBg: '#063a70',
+              headerColor: '#ffffff',
+              headerSortActiveBg: '#1a1a1a',
+              headerSortHoverBg: '#333333',
             },
           },
         }}
@@ -744,7 +744,7 @@ const Portfolio = () => {
               type="primary"
               onClick={handleSubmit}
               loading={submitting}
-              style={{ background: '#042954', minWidth: 90 }}
+              style={{ background: '#000000', minWidth: 90 }}
             >
               {submitting ? 'Saving...' : editRecord ? 'Update' : 'Add'}
             </Button>

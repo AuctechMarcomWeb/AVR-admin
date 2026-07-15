@@ -1,4 +1,4 @@
-/* eslint-disable react/react-in-jsx-scope */
+﻿/* eslint-disable react/react-in-jsx-scope */
 /* eslint-disable prettier/prettier */
 import { useState } from 'react'
 import {
@@ -23,7 +23,7 @@ import ClassicEditor from '@ckeditor/ckeditor5-build-classic'
 import { useBlog } from '../../Hooks/useBlog'
 import SingleImageUpload from '../../components/SingleImageUpload'
 
-const TABLE_HEADER_BG = '#042954'
+const TABLE_HEADER_BG = '#000000'
 
 const Blog = () => {
   const {
@@ -224,7 +224,7 @@ const Blog = () => {
         <h4
           style={{
             margin: 0,
-            color: '#042954',
+            color: '#000000',
             fontWeight: 700,
           }}
         >
@@ -235,7 +235,7 @@ const Blog = () => {
           type="primary"
           icon={<PlusOutlined />}
           onClick={openAdd}
-          style={{ background: '#042954' }}
+          style={{ background: '#000000', color: '#ffffff' }}
         >
           Add Blog
         </Button>
@@ -290,7 +290,7 @@ const Blog = () => {
             checked={activeOnly}
             onChange={(event) => handleActiveToggle(event.target.checked)}
           >
-            Active only
+            Active
           </Checkbox>
         </div>
       </div>
@@ -300,9 +300,9 @@ const Blog = () => {
           components: {
             Table: {
               headerBg: TABLE_HEADER_BG,
-              headerColor: '#fff',
-              headerSortActiveBg: '#021933',
-              headerSortHoverBg: '#063a70',
+              headerColor: '#ffffff',
+              headerSortActiveBg: '#1a1a1a',
+              headerSortHoverBg: '#333333',
             },
           },
         }}
@@ -620,7 +620,7 @@ const Blog = () => {
               onClick={handleSubmit}
               loading={submitting}
               style={{
-                background: '#042954',
+                background: '#000000', color: '#ffffff',
                 minWidth: 90,
               }}
             >

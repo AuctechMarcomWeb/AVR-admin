@@ -1,4 +1,4 @@
-/* eslint-disable prettier/prettier */
+﻿/* eslint-disable prettier/prettier */
 import { useState } from 'react'
 import {
   Table,
@@ -22,7 +22,7 @@ import {
 import dayjs from 'dayjs'
 import { useContact } from '../../Hooks/useContact'
 
-const TABLE_HEADER_BG = '#042954'
+const TABLE_HEADER_BG = '#000000'
 
 const Contact = () => {
   const {
@@ -54,7 +54,7 @@ const Contact = () => {
           <div
             style={{
               fontWeight: 600,
-              color: '#042954',
+              color: '#000000',
               fontSize: 13,
             }}
           >
@@ -177,7 +177,7 @@ const Contact = () => {
         <h4
           style={{
             margin: 0,
-            color: '#042954',
+            color: '#000000',
             fontWeight: 700,
           }}
         >
@@ -236,9 +236,9 @@ const Contact = () => {
           components: {
             Table: {
               headerBg: TABLE_HEADER_BG,
-              headerColor: '#fff',
-              headerSortActiveBg: '#021933',
-              headerSortHoverBg: '#063a70',
+              headerColor: '#ffffff',
+              headerSortActiveBg: '#1a1a1a',
+              headerSortHoverBg: '#333333',
             },
           },
         }}
@@ -274,7 +274,7 @@ const Contact = () => {
             <Button
               type="primary"
               style={{
-                background: '#042954',
+                background: '#000000',
               }}
               onClick={handleMarkAsRead}
             >

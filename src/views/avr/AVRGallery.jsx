@@ -1,4 +1,4 @@
-/* eslint-disable react/react-in-jsx-scope */
+﻿/* eslint-disable react/react-in-jsx-scope */
 /* eslint-disable prettier/prettier */
 import { useState } from 'react'
 import {
@@ -27,7 +27,7 @@ import toast from 'react-hot-toast'
 import { useAVRGallery } from '../../Hooks/useAVRGallery'
 import MultipleImageUpload from '../../components/MultipleImageUpload'
 
-const TABLE_HEADER_BG = '#042954'
+const TABLE_HEADER_BG = '#000000'
 
 const normalizeImageUrls = (value) => {
   if (!value) return []
@@ -340,7 +340,7 @@ const AVRGallery = () => {
           <h4
             style={{
               margin: 0,
-              color: '#042954',
+              color: '#000000',
               fontWeight: 700,
             }}
           >
@@ -363,7 +363,7 @@ const AVRGallery = () => {
           icon={<PlusOutlined />}
           onClick={openAdd}
           style={{
-            background: '#042954',
+            background: '#000000',
           }}
         >
           Add Gallery
@@ -435,7 +435,7 @@ const AVRGallery = () => {
               checked={activeOnly}
               onChange={(event) => handleActiveToggle(event.target.checked)}
             >
-              Active only
+              Active
             </Checkbox>
           </div>
         </div>
@@ -446,9 +446,9 @@ const AVRGallery = () => {
           components: {
             Table: {
               headerBg: TABLE_HEADER_BG,
-              headerColor: '#fff',
-              headerSortActiveBg: '#021933',
-              headerSortHoverBg: '#063a70',
+              headerColor: '#ffffff',
+              headerSortActiveBg: '#1a1a1a',
+              headerSortHoverBg: '#333333',
             },
           },
         }}
@@ -555,7 +555,7 @@ const AVRGallery = () => {
               onClick={handleSubmit}
               loading={submitting}
               style={{
-                background: '#042954',
+                background: '#000000', color: '#ffffff',
                 minWidth: 100,
               }}
             >

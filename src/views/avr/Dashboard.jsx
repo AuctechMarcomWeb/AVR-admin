@@ -1,4 +1,4 @@
-/* eslint-disable prettier/prettier */
+﻿/* eslint-disable prettier/prettier */
 import { useEffect, useRef, useState } from 'react'
 import { Card, Row, Col, Table, Tag, Badge, ConfigProvider, Skeleton, Tooltip } from 'antd'
 import {
@@ -10,8 +10,8 @@ import { useNavigate } from 'react-router-dom'
 import dayjs from 'dayjs'
 import { useDashboard } from '../../Hooks/useDashboard'
 
-const BRAND = '#042954'
-const TABLE_HEADER_BG = '#042954'
+const BRAND = '#000000'
+const TABLE_HEADER_BG = '#000000'
 
 const STATUS_COLORS = {
   Pending: 'orange',
@@ -164,7 +164,7 @@ const consultationColumns = [
     width: 220,
     render: (_, r) => (
       <div style={{ lineHeight: 1.6 }}>
-        <div style={{ fontWeight: 600, color: '#042954', fontSize: 13 }}>{r.name}</div>
+        <div style={{ fontWeight: 600, color: '#000000', fontSize: 13 }}>{r.name}</div>
         <div style={{ fontSize: 12, color: '#555' }}>
           <MailOutlined style={{ marginRight: 4, color: '#888' }} />
           {r.email}

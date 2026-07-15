@@ -1,4 +1,4 @@
-/* eslint-disable react/react-in-jsx-scope */
+﻿/* eslint-disable react/react-in-jsx-scope */
 /* eslint-disable prettier/prettier */
 import { useState } from 'react'
 import {
@@ -24,7 +24,7 @@ import {
 import dayjs from 'dayjs'
 import { useBookConsultation } from '../../Hooks/useBookConsultation'
 
-const TABLE_HEADER_BG = '#042954'
+const TABLE_HEADER_BG = '#000000'
 
 const STATUS_OPTIONS = ['Pending', 'Confirmed', 'Completed', 'Cancelled']
 
@@ -75,7 +75,7 @@ const BookConsultation = () => {
       width: 220,
       render: (_, r) => (
         <div style={{ lineHeight: 1.6 }}>
-          <div style={{ fontWeight: 600, color: '#042954', fontSize: 13 }}>{r.name}</div>
+          <div style={{ fontWeight: 600, color: '#000000', fontSize: 13 }}>{r.name}</div>
           <div style={{ fontSize: 12, color: '#555' }}>
             <MailOutlined style={{ marginRight: 4, color: '#888' }} />
             {r.email}
@@ -128,10 +128,10 @@ const BookConsultation = () => {
           alignItems: 'center',
           marginBottom: 16,
           flexWrap: 'wrap',
-          gap: 8,
+          gap: 6,
         }}
       >
-        <h4 style={{ margin: 0, color: '#042954', fontWeight: 700 }}>Book Consultation</h4>
+        <h4 style={{ margin: 0, color: '#000000', fontWeight: 700 }}>Book Consultation</h4>
       </div>
 
       <div
@@ -139,7 +139,7 @@ const BookConsultation = () => {
           display: 'flex',
           alignItems: 'center',
           gap: 12,
-          marginBottom: 16,
+          marginBottom: 6,
           flexWrap: 'wrap',
         }}
       >
@@ -229,9 +229,9 @@ const BookConsultation = () => {
           components: {
             Table: {
               headerBg: TABLE_HEADER_BG,
-              headerColor: '#fff',
-              headerSortActiveBg: '#021933',
-              headerSortHoverBg: '#063a70',
+              headerColor: '#ffffff',
+              headerSortActiveBg: '#1a1a1a',
+              headerSortHoverBg: '#333333',
             },
           },
         }}
@@ -261,7 +261,7 @@ const BookConsultation = () => {
         onOk={handleStatusUpdate}
         onCancel={() => setViewRecord(null)}
         okText="Update Status"
-        okButtonProps={{ style: { background: '#042954' } }}
+        okButtonProps={{ style: { background: '#000000', color: '#ffffff' } }}
         width="min(580px, 95vw)"
         destroyOnHidden
       >

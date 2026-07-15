@@ -30,7 +30,7 @@ const AppSidebar = () => {
 
       <CSidebar
         style={{ zIndex: 3 }}
-        className="border-end"
+        className="border-end arv-sidebar"
         colorScheme="dark"
         position="fixed"
         unfoldable={unfoldable}
