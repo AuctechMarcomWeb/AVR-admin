@@ -6,9 +6,9 @@ import {
   Modal,
   Space,
   Popconfirm,
-  Tag,
   ConfigProvider,
   Input,
+  Switch,
   Descriptions,
   Badge,
 } from 'antd'
@@ -33,6 +33,7 @@ const Contact = () => {
     handleSearch,
     handlePageChange,
     markAsRead,
+    toggleRead,
     deleteItem,
   } = useContact()
 
@@ -41,7 +42,7 @@ const Contact = () => {
   const columns = [
     {
       title: 'Sr.No.',
-      width: 70,
+      width: 75,
       render: (_, __, index) =>
         (pagination.current - 1) * pagination.pageSize + index + 1,
     },
@@ -104,11 +105,14 @@ const Contact = () => {
     {
       title: 'Read',
       dataIndex: 'isRead',
-      width: 90,
-      render: (value) => (
-        <Tag color={value ? 'green' : 'orange'}>
-          {value ? 'Read' : 'Unread'}
-        </Tag>
+      width: 110,
+      render: (val, record) => (
+        <Switch
+          checked={val}
+          checkedChildren="Read"
+          unCheckedChildren="Unread"
+          onChange={() => toggleRead(record._id, val)}
+        />
       ),
     },
     {

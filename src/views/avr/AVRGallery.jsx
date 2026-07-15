@@ -57,6 +57,7 @@ const AVRGallery = () => {
     updateItem,
     deleteItem,
     uploadImage,
+    toggleStatus,
   } = useAVRGallery()
 
   const [modalOpen, setModalOpen] = useState(false)
@@ -234,6 +235,18 @@ const AVRGallery = () => {
                 />
               ))}
 
+              {/* Hidden images — PreviewGroup mein saari images include honi chahiye swipe ke liye */}
+              {images.slice(3).map((imageUrl, index) => (
+                <Image
+                  key={`hidden-${imageUrl}-${index}`}
+                  src={imageUrl}
+                  width={0}
+                  height={0}
+                  style={{ display: 'none' }}
+                  fallback="/images/image-placeholder.png"
+                />
+              ))}
+
               {remainingCount > 0 && (
                 <Tag
                   icon={<PictureOutlined />}
@@ -275,8 +288,15 @@ const AVRGallery = () => {
     {
       title: 'Status',
       dataIndex: 'isActive',
-      width: 100,
-      render: (value) => <Tag color={value ? 'green' : 'red'}>{value ? 'Active' : 'Inactive'}</Tag>,
+      width: 110,
+      render: (val, record) => (
+        <Switch
+          checked={val}
+          checkedChildren="Active"
+          unCheckedChildren="Inactive"
+          onChange={() => toggleStatus(record._id, val)}
+        />
+      ),
     },
     {
       title: 'Actions',

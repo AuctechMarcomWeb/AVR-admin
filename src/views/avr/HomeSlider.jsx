@@ -3,7 +3,7 @@
 import { useState } from 'react'
 import {
   Table, Button, Modal, Form, Input, Switch,
-  Space, Popconfirm, Tag, Image, ConfigProvider, Checkbox,
+  Space, Popconfirm, Image, ConfigProvider, Checkbox,
 } from 'antd'
 import {
   PlusOutlined, EditOutlined, DeleteOutlined, SearchOutlined,
@@ -18,7 +18,7 @@ const HomeSlider = () => {
   const {
     data, loading, search, activeOnly, pagination,
     handleSearch, handleActiveToggle, handlePageChange,
-    addItem, updateItem, deleteItem,
+    addItem, updateItem, deleteItem, toggleStatus,
   } = useHomeSlider()
 
   const [modalOpen, setModalOpen] = useState(false)
@@ -63,7 +63,7 @@ const HomeSlider = () => {
   const columns = [
     {
       title: 'Sr.No.',
-      width: 70,
+      width: 75,
       render: (_, __, i) => (pagination.current - 1) * pagination.pageSize + i + 1,
     },
     {
@@ -81,8 +81,15 @@ const HomeSlider = () => {
     {
       title: 'Status',
       dataIndex: 'isActive',
-      width: 90,
-      render: (v) => <Tag color={v ? 'green' : 'red'}>{v ? 'Active' : 'Inactive'}</Tag>,
+      width: 110,
+      render: (val, record) => (
+        <Switch
+          checked={val}
+          checkedChildren="Active"
+          unCheckedChildren="Inactive"
+          onChange={() => toggleStatus(record._id, val)}
+        />
+      ),
     },
     {
       title: 'Actions',

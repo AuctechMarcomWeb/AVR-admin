@@ -88,14 +88,14 @@ const AnimatedStat = ({ value, color }) => {
 
 /* ─── Stat card config ─── */
 const STAT_CARDS = [
-  {
-    title: 'Home Sliders',
-    icon: <PictureOutlined />,
-    color: '#1890ff',
-    path: '/home-slider',
-    value: (c) => c?.sliders?.total ?? 0,
-    sub: (c) => `Active: ${c?.sliders?.active ?? 0}  ·  Inactive: ${c?.sliders?.inactive ?? 0}`,
-  },
+  // {
+  //   title: 'Home Sliders',
+  //   icon: <PictureOutlined />,
+  //   color: '#1890ff',
+  //   path: '/home-slider',
+  //   value: (c) => c?.sliders?.total ?? 0,
+  //   sub: (c) => `Active: ${c?.sliders?.active ?? 0}  ·  Inactive: ${c?.sliders?.inactive ?? 0}`,
+  // },
   {
     title: 'Gallery Items',
     icon: <AppstoreOutlined />,

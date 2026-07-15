@@ -326,7 +326,7 @@ const Portfolio = () => {
   const columns = [
     {
       title: 'Sr.No.',
-      width: 70,
+      width: 75,
       render: (_, __, i) => (pagination.current - 1) * pagination.pageSize + i + 1,
     },
     {

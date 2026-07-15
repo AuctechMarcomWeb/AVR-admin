@@ -10,7 +10,6 @@ import {
   Switch,
   Space,
   Popconfirm,
-  Tag,
   Image,
   ConfigProvider,
   Checkbox,
@@ -39,6 +38,7 @@ const Blog = () => {
     addItem,
     updateItem,
     deleteItem,
+    toggleStatus,
   } = useBlog()
 
   const [modalOpen, setModalOpen] = useState(false)
@@ -177,8 +177,15 @@ const Blog = () => {
     {
       title: 'Status',
       dataIndex: 'isActive',
-      width: 95,
-      render: (value) => <Tag color={value ? 'green' : 'red'}>{value ? 'Active' : 'Inactive'}</Tag>,
+      width: 110,
+      render: (val, record) => (
+        <Switch
+          checked={val}
+          checkedChildren="Active"
+          unCheckedChildren="Inactive"
+          onChange={() => toggleStatus(record._id, val)}
+        />
+      ),
     },
     {
       title: 'Actions',

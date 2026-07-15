@@ -137,6 +137,20 @@ export const useAVRGallery = () => {
       })
   }
 
+  const toggleStatus = (id, currentStatus) => {
+    return galleryService
+      .update(id, { isActive: !currentStatus })
+      .then((res) => {
+        toast.success(res?.data?.message || 'Status updated')
+        fetchAll(search, activeOnly, pagination.current)
+        return res
+      })
+      .catch((err) => {
+        toast.error(err?.response?.data?.message || 'Failed to update status')
+        return Promise.reject(err)
+      })
+  }
+
   return {
     data,
     loading,
@@ -150,5 +164,6 @@ export const useAVRGallery = () => {
     updateItem,
     deleteItem,
     uploadImage,
+    toggleStatus,
   }
 }
